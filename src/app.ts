@@ -1,35 +1,8 @@
 /* eslint-disable camelcase */
-import fastify, { FastifyReply, FastifyRequest } from 'fastify'
+import fastify from 'fastify'
 
-import { z } from 'zod'
-
-import { prisma } from './lib/prisma'
+import { appRoutes } from './http/routes'
 
 export const app = fastify()
 
-app.post('/users', async (request: FastifyRequest, reply: FastifyReply) => {
-  const registerBodySchema = z.object({
-    name: z.string(),
-    cpf_cnpj: z.string().min(11),
-    cep: z.string().min(8),
-    email: z.string().email(),
-    password: z.string().min(6),
-  })
-
-  const { name, cpf_cnpj, cep, email, password } = registerBodySchema.parse(
-    request.body,
-  )
-
-  await prisma.user.create({
-    data: {
-      name,
-      cpf_cnpj,
-      cep,
-      email,
-      password_hash: password,
-      is_active: true,
-    },
-  })
-
-  return reply.code(201).send()
-})
+app.register(appRoutes)
