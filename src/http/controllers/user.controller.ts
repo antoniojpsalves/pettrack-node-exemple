@@ -25,6 +25,17 @@ export async function registerNewUser(
   // criptografando a senha do user
   const password_hash = await hash(password, 6)
 
+  // validando que existe conflito ao tentar cadastrar com o msm cnpj
+  const userWithSameCpfCnpj = await prisma.user.findUnique({
+    where: {
+      cpf_cnpj,
+    },
+  })
+
+  if (userWithSameCpfCnpj) {
+    reply.code(409).send({})
+  }
+
   await prisma.user.create({
     data: {
       name,
