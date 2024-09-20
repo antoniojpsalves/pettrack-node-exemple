@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  name          String
+  email         String   @unique
+  password_hash String
+  cpf_cnpj      String   @unique
+  cep           String
+  is_active     Boolean
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  Pets          Pet[] // Pets nome acessado no js
+
+  @@map("users")
+}
+
+model Pet {
+  id           String    @id @default(uuid())
+  name         String
+  birthdate    DateTime?
+  adoptionDate DateTime?
+  breed        String
+  gender       Int
+  size         Int
+  temperament  Int
+  color        String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("pets")
+}
