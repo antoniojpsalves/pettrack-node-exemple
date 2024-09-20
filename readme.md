@@ -26,9 +26,12 @@ Tcc part 1 - App de rastreio de pets
 - .env
 
 ## Rode o container do docker que contem o banco de dados postgresql
-- docker compose up -d
+``` docker compose up -d ```
 
 ## Aplique as migrations no banco de dados
-- npx prisma migrate dev
+``` npx prisma migrate dev ```
+
+## Para rodar o servidor e subir a api
+``` npm run dev ```
 
 ### :tada: pronto!
