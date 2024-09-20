@@ -1,7 +1,10 @@
-/* eslint-disable camelcase */
 import { FastifyReply, FastifyRequest } from 'fastify'
+
 import { z } from 'zod'
+
 import { prisma } from '../../lib/prisma'
+
+import { hash } from 'bcryptjs'
 
 export async function registerNewUser(
   request: FastifyRequest,
@@ -19,13 +22,16 @@ export async function registerNewUser(
     request.body,
   )
 
+  // criptografando a senha do user
+  const password_hash = await hash(password, 6)
+
   await prisma.user.create({
     data: {
       name,
       cpf_cnpj,
       cep,
       email,
-      password_hash: password,
+      password_hash,
       is_active: true,
     },
   })

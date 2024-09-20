@@ -14,7 +14,7 @@ Tcc part 1 - App de rastreio de pets
 
 ## RNFs (Requisitos não funcionais)
 
-- 
+- [x] criptografar a senha do usuário
 
 
 
