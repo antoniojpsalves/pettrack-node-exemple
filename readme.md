@@ -29,7 +29,8 @@ Tcc part 1 - App de rastreio de pets
 ``` docker compose up -d ```
 
 ## Aplique as migrations no banco de dados
-``` npx prisma migrate dev ```
+- 1 ``` npx prisma migrate generate```
+- 2 ``` npx prisma migrate dev ```
 
 ## Para rodar o servidor e subir a api
 ``` npm run dev ```
