@@ -2,7 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { z } from 'zod'
 
-import { registerUser } from '../../use-cases/registerUser'
+import { RegisterUsers } from '../../use-cases/users/registerUser'
+import { PrismaUsersRepository } from '../../repositories/users/prisma-users-repository'
 
 export async function registerNewUser(
   request: FastifyRequest,
@@ -23,7 +24,21 @@ export async function registerNewUser(
   const is_active = true
 
   try {
-    await registerUser({ name, cpf_cnpj, cep, email, password, is_active })
+    // Instanciando a dependência
+    const prismaUserRepository = new PrismaUsersRepository()
+
+    // Injetando a dependência
+    const registerUseCase = new RegisterUsers(prismaUserRepository)
+
+    // Usando o caso de uso
+    await registerUseCase.execute({
+      name,
+      cpf_cnpj,
+      cep,
+      email,
+      password,
+      is_active,
+    })
   } catch (err) {
     console.error(err)
     reply.code(409).send()
