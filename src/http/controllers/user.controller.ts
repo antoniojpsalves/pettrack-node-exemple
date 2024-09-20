@@ -2,9 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { z } from 'zod'
 
-import { prisma } from '../../lib/prisma'
-
-import { hash } from 'bcryptjs'
+import { registerUser } from '../../services/registerUser'
 
 export async function registerNewUser(
   request: FastifyRequest,
@@ -22,30 +20,14 @@ export async function registerNewUser(
     request.body,
   )
 
-  // criptografando a senha do user
-  const password_hash = await hash(password, 6)
+  const is_active = true
 
-  // validando que existe conflito ao tentar cadastrar com o msm cnpj
-  const userWithSameCpfCnpj = await prisma.user.findUnique({
-    where: {
-      cpf_cnpj,
-    },
-  })
-
-  if (userWithSameCpfCnpj) {
-    reply.code(409).send({})
+  try {
+    await registerUser({ name, cpf_cnpj, cep, email, password, is_active })
+  } catch (err) {
+    console.error(err)
+    reply.code(409).send()
   }
-
-  await prisma.user.create({
-    data: {
-      name,
-      cpf_cnpj,
-      cep,
-      email,
-      password_hash,
-      is_active: true,
-    },
-  })
 
   return reply.code(201).send()
 }
