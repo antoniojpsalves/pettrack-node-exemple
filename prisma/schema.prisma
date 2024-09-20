@@ -18,7 +18,7 @@ model User {
   is_active     Boolean
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
-  Pets          Pet[] // Pets nome acessado no js
+  pets          Pet[] // Pets nome acessado no js
 
   @@map("users")
 }
