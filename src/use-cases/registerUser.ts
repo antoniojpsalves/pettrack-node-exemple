@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs'
 import { prisma } from '../lib/prisma'
 import { RegisterUserDto } from './dtos/registerUserDto'
+import { PrismaUsersRepository } from '../repositories/prisma-users-repository'
 
 export async function registerUser({
   name,
@@ -22,14 +23,15 @@ export async function registerUser({
     throw new Error('Email already exists.')
   }
 
-  await prisma.user.create({
-    data: {
-      name,
-      cpf_cnpj,
-      cep,
-      email,
-      password_hash,
-      is_active,
-    },
+  // instanciando a classe de repository do userCreate
+  const prismaUserRepository = new PrismaUsersRepository()
+
+  await prismaUserRepository.create({
+    name,
+    cpf_cnpj,
+    cep,
+    email,
+    password_hash,
+    is_active,
   })
 }
