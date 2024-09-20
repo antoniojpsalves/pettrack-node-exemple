@@ -3,6 +3,7 @@ import { hash } from 'bcryptjs'
 import { RegisterUserDto } from './dtos/registerUserDto'
 
 import { UsersRepository } from '../../repositories/users/users-repository'
+import { UserEmailAlreadyExistsError } from './errors/user-email-already-exists-error'
 
 // inversão de dependência para não depender da instancia do prisma nesse momento
 export class RegisterUsers {
@@ -22,7 +23,7 @@ export class RegisterUsers {
     const userWithSameCpfCnpj = await this.usersRepository.findByEmail(email)
 
     if (userWithSameCpfCnpj) {
-      throw new Error('Email already exists.')
+      throw new UserEmailAlreadyExistsError()
     }
 
     // instanciando a classe de repository do userCreate

@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { RegisterUsers } from '../../use-cases/users/registerUser'
 import { PrismaUsersRepository } from '../../repositories/users/prisma-users-repository'
+import { UserEmailAlreadyExistsError } from '../../use-cases/users/errors/user-email-already-exists-error'
 
 export async function registerNewUser(
   request: FastifyRequest,
@@ -40,8 +41,13 @@ export async function registerNewUser(
       is_active,
     })
   } catch (err) {
-    console.error(err)
-    reply.code(409).send()
+    // console.error(err)
+
+    if (err instanceof UserEmailAlreadyExistsError) {
+      reply.code(409).send({ message: err.message })
+    }
+
+    throw err
   }
 
   return reply.code(201).send()
