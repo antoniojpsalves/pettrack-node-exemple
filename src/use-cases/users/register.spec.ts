@@ -1,31 +1,14 @@
 import { expect, describe, it } from 'vitest'
 import { RegisterUsers } from './registerUser'
 import { compare } from 'bcryptjs'
-import { UsersRepository } from '../../repositories/users/users-repository'
+import { InMemoryUsersRepository } from '../../repositories/users/in-memony-users-repository'
 
 describe('Register use case', () => {
   it('should hash user password upon registration', async () => {
     // Users Repository MOCK
-    const repositoryMock: UsersRepository = {
-      async findByEmail() {
-        return null
-      },
-      async create(data) {
-        return {
-          id: '1',
-          name: data.name,
-          cep: data.cep,
-          cpf_cnpj: data.cpf_cnpj,
-          created_at: new Date(),
-          email: data.email,
-          is_active: data.is_active,
-          password_hash: data.password_hash,
-          updated_at: new Date(),
-        }
-      },
-    }
+    const userRepositoryMock = new InMemoryUsersRepository()
 
-    const registerUseCase = new RegisterUsers(repositoryMock)
+    const registerUseCase = new RegisterUsers(userRepositoryMock)
 
     const { user } = await registerUseCase.execute({
       name: 'johnathan',
