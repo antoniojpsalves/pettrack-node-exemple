@@ -4,6 +4,7 @@ import { RegisterUserDto } from './dtos/registerUserDto'
 
 import { UsersRepository } from '../../repositories/users/users-repository'
 import { UserEmailAlreadyExistsError } from './errors/user-email-already-exists-error'
+import { RegisterUseCaseResponse } from './dtos/registerUseCaseResponseDto'
 
 // inversão de dependência para não depender da instancia do prisma nesse momento
 export class RegisterUsers {
@@ -17,7 +18,7 @@ export class RegisterUsers {
     email,
     password,
     is_active,
-  }: RegisterUserDto) {
+  }: RegisterUserDto): Promise<RegisterUseCaseResponse> {
     const password_hash = await hash(password, 6)
 
     const userWithSameCpfCnpj = await this.usersRepository.findByEmail(email)
@@ -29,7 +30,7 @@ export class RegisterUsers {
     // instanciando a classe de repository do userCreate
     // const prismaUserRepository = new PrismaUsersRepository()
 
-    await this.usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       cpf_cnpj,
       cep,
@@ -37,5 +38,9 @@ export class RegisterUsers {
       password_hash,
       is_active,
     })
+
+    return {
+      user,
+    }
   }
 }
