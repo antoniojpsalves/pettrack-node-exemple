@@ -5,8 +5,8 @@ Tcc part 1 - App de rastreio de pets
 ## RFs (Requisitos funcionais)
 
 - [x] Deve ser possível cadastrar um novo usuário
+- [x] Deve ser possível realizar login tendo usuário e senha
 - [ ] Deve ser possível editar os dados de um usuário
-- [ ] Deve ser possível realizar login tendo usuário e senha
 
 ## RNs (Regras de negócio)
 
