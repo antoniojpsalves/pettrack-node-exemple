@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { compare } from 'bcryptjs'
 import { UsersRepository } from '../../repositories/users/users-repository'
-import { InvalidCredentialsError } from '../users/errors/invalid-credentials-error'
+import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 import { AuthenticateUseCaseRequest } from './dtos/authenticateUserDto'
 import { AuthenticateUserCaseResponse } from './dtos/authenticateUserResponse'
 
