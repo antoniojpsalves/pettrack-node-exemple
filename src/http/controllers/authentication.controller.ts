@@ -17,6 +17,8 @@ export async function authenticate(
 
   const { email, password } = authenticateBodySchema.parse(request.body)
 
+  // console.log({ email, password })
+
   try {
     const prismaUserRepository = new PrismaUsersRepository()
 
@@ -30,6 +32,8 @@ export async function authenticate(
     if (err instanceof InvalidCredentialsError) {
       reply.code(400).send({ message: err.message })
     }
+
+    // console.log(err)
 
     throw err
   }
