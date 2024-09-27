@@ -17,6 +17,8 @@ export async function authenticate(
 
   const { email, password } = authenticateBodySchema.parse(request.body)
 
+  let user
+
   // console.log({ email, password })
 
   try {
@@ -24,7 +26,7 @@ export async function authenticate(
 
     const authenticationUseCase = new AuthenticateUseCase(prismaUserRepository)
 
-    await authenticationUseCase.execute({
+    user = await authenticationUseCase.execute({
       email,
       password,
     })
@@ -37,5 +39,7 @@ export async function authenticate(
 
     throw err
   }
-  return reply.code(200).send()
+
+  // const { password_hash, ...userAuth } = user
+  return reply.code(200).send(user)
 }
